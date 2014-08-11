@@ -13,6 +13,8 @@ plugin.tx_finewsletter {
 		# rewrittenPropertyMapper = 1
 	}
     settings {
+        # in seconds to be as flexible as possible…
+        expirationTime = 172800
         redirect {
             error {
                 invalidEmail = 0

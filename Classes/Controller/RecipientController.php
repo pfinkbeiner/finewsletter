@@ -133,4 +133,21 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 		$this->redirect('subscribe');
 	}
 
+	/**
+	 * verify Action
+	 *
+	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
+	 * @param \string $hash
+	 * @return void
+	 */
+	public function verifyAction(\FI\Finewsletter\Domain\Model\Recipient $recipient, $hash) {
+		$recipientUtility = $this->objectManager->get('\\FI\\Finewsletter\\Utility\\RecipientUtility');
+		if($recipientUtility->isConfirmationLinkValid($recipient, $hash, $this->settings) === TRUE) {
+			$recipient->setActive(TRUE);
+			$this->recipientRepository->update($recipient);
+		} else {
+
+		}
+	}
+
 }

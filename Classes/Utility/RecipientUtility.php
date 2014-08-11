@@ -44,7 +44,33 @@ class RecipientUtility {
 			->reset()
 			->setCreateAbsoluteUri(TRUE)
 			->setUseCacheHash(FALSE)
-			->uriFor('verify', array('recipient' => $newRecipient, 'hash' => $recipient->getToken()), 'Recipient', 'finewsletter', 'subscribe');
+			->uriFor('verify', array(
+				'recipient' => $recipient, 
+				'hash' => $recipient->getToken()
+			), 'Recipient', 'finewsletter', 'subscribe');
 		return $uri;
 	}
+
+	/**
+	 * Check if confirmation link is valid
+	 *
+	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
+	 * @param \string $hash
+	 * @param \array $settings
+	 * @return \boolean
+	 */
+	public function isConfirmationLinkValid(\FI\Finewsletter\Domain\Model\Recipient $recipient, $hash, array $settings) {
+		$status = FALSE;
+		// First, check if hash equals token
+		if($recipient->getToken() === $hash) {
+			// OK well, token and hash seems to be the same
+			// Let's check if there is set an expiration time.
+			if(isset($settings['expirationTime']) && !empty($settings['expirationTime'])) {
+				// Check for expiration time, too
+			} else {
+				$status = !$status;
+			}
+		}
+		return $status;
+	} 
 }
