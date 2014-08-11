@@ -6,13 +6,13 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
 	$_EXTKEY,
 	'Subscribe',
-	'Subscribe to Newsletter'
+	'Subscribe to newsletter'
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
 	$_EXTKEY,
 	'Unsubscribe',
-	'Unsubscribe from Newsletter'
+	'Unsubscribe from newsletter'
 );
 //
 //if (TYPO3_MODE === 'BE') {

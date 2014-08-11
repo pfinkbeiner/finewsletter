@@ -41,13 +41,21 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 	protected $recipientRepository = NULL;
 
 	/**
+	 * recipientValidator
+	 *
+	 * @var \FI\Finewsletter\Validation\RecipientValidator
+	 * @inject
+	 */
+	protected $recipientValidator = NULL;
+
+	/**
 	 * action new
 	 *
 	 * @param \FI\Finewsletter\Domain\Model\Recipient $newRecipient
 	 * @ignorevalidation $newRecipient
 	 * @return void
 	 */
-	public function newAction(\FI\Finewsletter\Domain\Model\Recipient $newRecipient = NULL) {
+	public function subscribeAction(\FI\Finewsletter\Domain\Model\Recipient $newRecipient = NULL) {
 		$this->view->assign('newRecipient', $newRecipient);
 	}
 
@@ -58,32 +66,31 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 	 * @return void
 	 */
 	public function createAction(\FI\Finewsletter\Domain\Model\Recipient $newRecipient) {
-		$this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-		$this->recipientRepository->add($newRecipient);
-		$this->redirect('list');
-	}
+		// Check if e-mail address is valid.
+		if($this->recipientValidator->isEmailValid($newRecipient->getEmail()) === TRUE) {
 
-	/**
-	 * action edit
-	 *
-	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
-	 * @ignorevalidation $recipient
-	 * @return void
-	 */
-	public function editAction(\FI\Finewsletter\Domain\Model\Recipient $recipient) {
-		$this->view->assign('recipient', $recipient);
-	}
+			// Check if e-mail address is already in use.
+			if($this->recipientValidator->isEmailUnique($newRecipient->getEmail()) === TRUE) {
+				$newRecipient->setToken(uniqid());
+				$newRecipient->setUseragent($_SERVER['HTTP_USER_AGENT']);
+				$this->recipientRepository->add($newRecipient);
+			} else {
+				$this->addFlashMessage(
+					$this->settings['flashMessages']['error']['emailNotUnique'],
+					'',
+					\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+				);
+			}
 
-	/**
-	 * action update
-	 *
-	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
-	 * @return void
-	 */
-	public function updateAction(\FI\Finewsletter\Domain\Model\Recipient $recipient) {
-		$this->addFlashMessage('The object was updated. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-		$this->recipientRepository->update($recipient);
-		$this->redirect('list');
+		} else {
+			$this->addFlashMessage(
+				$this->settings['flashMessages']['error']['invalidEmail'],
+				'',
+				\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+			);
+		}
+
+		$this->redirect('subscribe');
 	}
 
 }

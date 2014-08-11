@@ -7,12 +7,12 @@ if (!defined('TYPO3_MODE')) {
 	'FI.' . $_EXTKEY,
 	'Subscribe',
 	array(
-		'Recipient' => 'new, create, edit, update',
+		'Recipient' => 'subscribe, create',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Recipient' => 'create, update',
+		'Recipient' => 'subscribe, create',
 		
 	)
 );
@@ -21,12 +21,12 @@ if (!defined('TYPO3_MODE')) {
 	'FI.' . $_EXTKEY,
 	'Unsubscribe',
 	array(
-		'Recipient' => 'new, create, edit, update',
+		'Recipient' => 'unsubscribe, update',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Recipient' => 'create, update',
+		'Recipient' => 'unsubscribe, update',
 		
 	)
 );

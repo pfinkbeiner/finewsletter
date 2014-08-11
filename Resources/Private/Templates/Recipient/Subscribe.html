@@ -20,7 +20,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:render partial="FormErrors" arguments="{object:Recipient}" />
 
 <f:form action="create"  name="newRecipient" object="{newRecipient}">
-<f:render partial="Recipient/FormFields" />
+	<f:form.textfield property="email" />
 	<f:form.submit value="Create new" />
 </f:form>
 </f:section>
