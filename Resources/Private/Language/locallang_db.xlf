@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-08-11T17:15:08Z" product-name="finewsletter">
+		<header/>
+		<body>
+			<trans-unit id="tx_finewsletter_domain_model_recipient">
+				<source>Recipient</source>
+			</trans-unit>
+			<trans-unit id="tx_finewsletter_domain_model_recipient.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="tx_finewsletter_domain_model_recipient.token">
+				<source>Token</source>
+			</trans-unit>
+			<trans-unit id="tx_finewsletter_domain_model_recipient.active">
+				<source>Active</source>
+			</trans-unit>
+			<trans-unit id="tx_finewsletter_domain_model_recipient.useragent">
+				<source>Useragent</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

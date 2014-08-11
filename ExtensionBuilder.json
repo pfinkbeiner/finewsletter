@@ -1,0 +1,148 @@
+{
+    "modules": [
+        {
+            "config": {
+                "position": [
+                    90,
+                    86
+                ]
+            },
+            "name": "New Model Object",
+            "value": {
+                "actionGroup": {
+                    "_default0_list": false,
+                    "_default1_show": false,
+                    "_default2_new_create": true,
+                    "_default3_edit_update": true,
+                    "_default4_delete": false,
+                    "customActions": []
+                },
+                "name": "Recipient",
+                "objectsettings": {
+                    "addDeletedField": true,
+                    "addHiddenField": true,
+                    "addStarttimeEndtimeFields": true,
+                    "aggregateRoot": true,
+                    "categorizable": false,
+                    "description": "",
+                    "mapToTable": "",
+                    "parentClass": "",
+                    "sorting": false,
+                    "type": "Entity",
+                    "uid": "246009918799"
+                },
+                "propertyGroup": {
+                    "properties": [
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": true,
+                            "propertyName": "email",
+                            "propertyType": "String",
+                            "uid": "101020755225"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "token",
+                            "propertyType": "String",
+                            "uid": "141586758525"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "active",
+                            "propertyType": "Boolean",
+                            "uid": "1053035785130"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "useragent",
+                            "propertyType": "String",
+                            "uid": "747435651288"
+                        }
+                    ]
+                },
+                "relationGroup": {
+                    "relations": []
+                }
+            }
+        }
+    ],
+    "properties": {
+        "backendModules": [
+            {
+                "actions": {
+                    "controllerActionCombinations": ""
+                },
+                "description": "Newsletter Management",
+                "key": "management",
+                "mainModule": "web",
+                "name": "Newsletter Management",
+                "tabLabel": "Newsletter Management"
+            }
+        ],
+        "description": "Another newsletter extension.",
+        "emConf": {
+            "category": "plugin",
+            "custom_category": "",
+            "dependsOn": "typo3 => 6.2\n",
+            "disableLocalization": false,
+            "disableVersioning": false,
+            "sourceLanguage": "en",
+            "state": "alpha",
+            "targetVersion": "6.2",
+            "version": ""
+        },
+        "extensionKey": "finewsletter",
+        "name": "Newsletter",
+        "originalExtensionKey": "finewsletter",
+        "persons": [
+            {
+                "company": "finkbeiner.me",
+                "email": "mail@finkbeiner.me",
+                "name": "Patrick Finkbeiner",
+                "role": "Developer"
+            }
+        ],
+        "plugins": [
+            {
+                "actions": {
+                    "controllerActionCombinations": "",
+                    "noncacheableActions": "",
+                    "switchableActions": ""
+                },
+                "key": "subscribe",
+                "name": "Subscribe to Newsletter"
+            },
+            {
+                "actions": {
+                    "controllerActionCombinations": "",
+                    "noncacheableActions": "",
+                    "switchableActions": ""
+                },
+                "key": "unsubscribe",
+                "name": "Unsubscribe from Newsletter"
+            }
+        ],
+        "vendorName": "FI"
+    },
+    "wires": [],
+    "log": {
+        "last_modified": "2014-08-11 05:15",
+        "extension_builder_version": "6.2.0",
+        "be_user": " (1)"
+    }
+}
