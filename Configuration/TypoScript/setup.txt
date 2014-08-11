@@ -13,13 +13,41 @@ plugin.tx_finewsletter {
 		# rewrittenPropertyMapper = 1
 	}
     settings {
+        redirect {
+            error {
+                invalidEmail = 0
+                emailNotUnique = 0
+            }
+            notice {
+                confirmationMailSent = 0
+            }
+            success {
+                subscriptionConfirmed = 0
+            }
+        }
         flashMessages {
             error {
                 invalidEmail = This is not a valid e-mail address. Please try another one.
                 emailNotUnique = This e-mail address is already in use. Please use another one.
             }
+            notice {
+                confirmationMailSent = We've sent you an confirmation mail. Please verify your e-mail address by clicking the link in the email.
+            }
             success {
-            
+                subscriptionConfirmed = Thank you for subscribing to our newsletter!
+            }
+        }
+        mail {
+            fromEmail = noreply@finkbeiner.me
+            fromName = Newsletter System
+            recipient {
+                subscribe {
+                    subject = Please confirm your subscription
+                    templates {
+                        html = EXT:finewsletter/Resources/Private/Templates/Mail/Recipient/Subscribe.html
+                        plain = EXT:finewsletter/Resources/Private/Templates/Mail/Recipient/Subscribe.txt
+                    }
+                }
             }
         }
     }

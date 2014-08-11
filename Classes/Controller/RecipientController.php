@@ -49,6 +49,14 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 	protected $recipientValidator = NULL;
 
 	/**
+	 * persistenceManager
+	 *
+	 * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+	 * @inject
+	 */
+	protected $persistenceManager = NULL;
+
+	/**
 	 * action new
 	 *
 	 * @param \FI\Finewsletter\Domain\Model\Recipient $newRecipient
@@ -71,9 +79,41 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 
 			// Check if e-mail address is already in use.
 			if($this->recipientValidator->isEmailUnique($newRecipient->getEmail()) === TRUE) {
-				$newRecipient->setToken(uniqid());
+				$hashService = $this->objectManager->get('\\TYPO3\\CMS\\Extbase\\Security\\Cryptography\\HashService');
+				$newRecipient->setToken(
+					$hashService->generateHmac($newRecipient->getEmail())
+				);
+
 				$newRecipient->setUseragent($_SERVER['HTTP_USER_AGENT']);
 				$this->recipientRepository->add($newRecipient);
+				$this->persistenceManager->persistAll();
+
+				$recipientUtility = $this->objectManager->get('\\FI\\Finewsletter\\Utility\\RecipientUtility');
+				$uriBuilder = $this->objectManager->get('\\TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
+
+				$mailService = $this->objectManager->get('\\FI\\Finewsletter\\Service\\MailService');
+				$emailContent = $mailService->generateEmailContent(array(
+					'html'  => $this->settings['mail']['recipient']['subscribe']['templates']['html'],
+					'plain' => $this->settings['mail']['recipient']['subscribe']['templates']['plain']
+				), array(
+					'confirmationLink' => $recipientUtility->generateConfirmationLink($newRecipient, $uriBuilder)
+				), TRUE, TRUE);
+
+				$mailService->sendMail(
+					$this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage'),
+					$newRecipient->getEmail(),
+					$this->settings['mail']['recipient']['subscribe']['subject'],
+					$emailContent['html'],
+					$emailContent['plain'],
+					$this->settings['mail']
+				);
+
+
+				$this->addFlashMessage(
+					$this->settings['flashMessages']['notice']['confirmationMailSent'],
+					'',
+					\TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE
+				);
 			} else {
 				$this->addFlashMessage(
 					$this->settings['flashMessages']['error']['emailNotUnique'],

@@ -6,10 +6,10 @@ if (!defined ('TYPO3_MODE')) {
 $GLOBALS['TCA']['tx_finewsletter_domain_model_recipient'] = array(
 	'ctrl' => $GLOBALS['TCA']['tx_finewsletter_domain_model_recipient']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, email, token, active, useragent',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, email, token, active, useragent, crdate',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, email, token, active, useragent, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, email, token, active, useragent, crdate, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -131,6 +131,15 @@ $GLOBALS['TCA']['tx_finewsletter_domain_model_recipient'] = array(
 				'size' => 30,
 				'eval' => 'trim'
 			),
+		),
+		'crdate' => Array (
+			'exclude' => 1,
+			'label' => 'Creation date',
+			'config' => Array (
+				'type' => 'none',
+				'format' => 'date',
+				'eval' => 'date',
+			)
 		),
 		
 	),

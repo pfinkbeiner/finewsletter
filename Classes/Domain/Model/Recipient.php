@@ -62,6 +62,13 @@ class Recipient extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $useragent = '';
 
 	/**
+	 * crdate
+	 *
+	 * @var DateTime
+	 */
+	protected $crdate;
+
+	/**
 	 * Returns the email
 	 *
 	 * @return string $email
@@ -144,6 +151,24 @@ class Recipient extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function setUseragent($useragent) {
 		$this->useragent = $useragent;
+	}
+
+	/**
+	 * Returns the crdate
+	 *
+	 * @return DateTime $crdate
+	 */
+	public function setCrdate(\DateTime $crdate) {
+		$this->crdate = $crdate;
+	}
+
+	/**
+	 * Returns the crdate
+	 *
+	 * @return DateTime $crdate
+	 */
+	public function getCrdate() {
+		return $this->crdate;
 	}
 
 }
