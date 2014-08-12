@@ -81,7 +81,7 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 			if($this->recipientValidator->isEmailUnique($newRecipient->getEmail()) === TRUE) {
 				$hashService = $this->objectManager->get('\\TYPO3\\CMS\\Extbase\\Security\\Cryptography\\HashService');
 				$newRecipient->setToken(
-					$hashService->generateHmac($newRecipient->getEmail())
+					$hashService->generateHmac($newRecipient->getEmail() . uniqid())
 				);
 
 				$newRecipient->setUseragent($_SERVER['HTTP_USER_AGENT']);
@@ -107,7 +107,6 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 					$emailContent['plain'],
 					$this->settings['mail']
 				);
-
 
 				$this->addFlashMessage(
 					$this->settings['flashMessages']['notice']['confirmationMailSent'],
@@ -135,6 +134,7 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 
 	/**
 	 * verify Action
+	 * Action redirects after any matching case
 	 *
 	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
 	 * @param \string $hash
@@ -142,12 +142,82 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 	 */
 	public function verifyAction(\FI\Finewsletter\Domain\Model\Recipient $recipient, $hash) {
 		$recipientUtility = $this->objectManager->get('\\FI\\Finewsletter\\Utility\\RecipientUtility');
-		if($recipientUtility->isConfirmationLinkValid($recipient, $hash, $this->settings) === TRUE) {
-			$recipient->setActive(TRUE);
-			$this->recipientRepository->update($recipient);
+		// First, check if already active
+		if($recipient->isActive() === TRUE) {
+			// Already active
+			$target = $this->uriBuilder
+				->setTargetPageUid((int) $this->settings['redirect']['notice']['alreadyConfirmed'])
+				->build();
+			$this->redirectToURI($target);
 		} else {
+			// Second check if link is expired
+			if($recipientUtility->isConfirmationLinkExpired($recipient, (int) $this->settings['expirationTime']) === TRUE) {
+				// Sorry, expired…
+				$target = $this->uriBuilder
+					->setTargetPageUid((int) $this->settings['redirect']['error']['invalidVerificationLink'])
+					->build();
+				$this->redirectToURI($target);
+			} else {
+				// Well, not already aktive and not expired
+				// Check if Hash is valid
+				if($recipientUtility->isConfirmationHashValid($recipient, $hash) === TRUE) {
+					$recipient->setActive(TRUE);
+					$this->recipientRepository->update($recipient);
 
+					// Success, YAY!
+					$target = $this->uriBuilder
+						->setTargetPageUid((int) $this->settings['redirect']['success']['subscriptionConfirmed'])
+						->build();
+					$this->redirectToURI($target);
+				} else {
+
+					$target = $this->uriBuilder
+						->setTargetPageUid((int) $this->settings['redirect']['error']['invalidVerificationLink'])
+						->build();
+					$this->redirectToURI($target);
+				}
+			}
 		}
 	}
 
+	/**
+	 * unsubscribe action
+	 *
+	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
+	 * @ignorevalidation $recipient
+	 * @return void
+	 */
+	public function unsubscribeAction(\FI\Finewsletter\Domain\Model\Recipient $recipient = NULL) {
+		$this->view->assign('recipient', $recipient);
+	}
+
+	/**
+	 * delete action
+	 *
+	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
+	 * @return void
+	 */
+	public function deleteAction(\FI\Finewsletter\Domain\Model\Recipient $recipient) {
+		// Check if e-mail address is valid.
+		if($this->recipientValidator->isEmailValid($recipient->getEmail()) === TRUE) {
+			$recipient = $this->recipientRepository->findOneByEmail($recipient->getEmail());
+			if($recipient !== NULL) {
+			} else {
+				// Recipient does not exist in database
+				$this->addFlashMessage(
+					$this->settings['flashMessages']['error']['emailNotExists'],
+					'',
+					\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+				);
+			}
+		} else {
+			$this->addFlashMessage(
+				$this->settings['flashMessages']['error']['invalidEmail'],
+				'',
+				\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+			);
+		}
+
+		$this->redirect('unsubscribe');
+	}
 }

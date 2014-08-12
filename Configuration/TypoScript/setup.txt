@@ -14,23 +14,29 @@ plugin.tx_finewsletter {
 	}
     settings {
         # in seconds to be as flexible as possible…
-        expirationTime = 172800
+        expirationTime = 60
         redirect {
             error {
                 invalidEmail = 0
                 emailNotUnique = 0
+                invalidVerificationLink = 15
+                confirmationLinkExpired = 16
+
             }
             notice {
-                confirmationMailSent = 0
+                confirmationMailSent = 13
+                alreadyConfirmed = 17
             }
             success {
-                subscriptionConfirmed = 0
+                subscriptionConfirmed = 14
             }
         }
         flashMessages {
             error {
                 invalidEmail = This is not a valid e-mail address. Please try another one.
                 emailNotUnique = This e-mail address is already in use. Please use another one.
+
+                emailNotExists = This e-mail address does not exist.
             }
             notice {
                 confirmationMailSent = We've sent you an confirmation mail. Please verify your e-mail address by clicking the link in the email.

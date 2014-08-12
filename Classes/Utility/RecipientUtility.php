@@ -56,21 +56,39 @@ class RecipientUtility {
 	 *
 	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
 	 * @param \string $hash
-	 * @param \array $settings
 	 * @return \boolean
 	 */
-	public function isConfirmationLinkValid(\FI\Finewsletter\Domain\Model\Recipient $recipient, $hash, array $settings) {
+	public function isConfirmationHashValid(\FI\Finewsletter\Domain\Model\Recipient $recipient, $hash) {
 		$status = FALSE;
 		// First, check if hash equals token
 		if($recipient->getToken() === $hash) {
-			// OK well, token and hash seems to be the same
-			// Let's check if there is set an expiration time.
-			if(isset($settings['expirationTime']) && !empty($settings['expirationTime'])) {
-				// Check for expiration time, too
-			} else {
-				$status = !$status;
-			}
+			$status = !$status;
 		}
 		return $status;
 	} 
+
+	/**
+	 * Is link expired
+	 *
+	 * @param \FI\Finewsletter\Domain\Model\Recipient $recipient
+	 * @param \integer $expirationTime
+	 * @return \boolean
+	 */
+	public function isConfirmationLinkExpired(\FI\Finewsletter\Domain\Model\Recipient $recipient, $expirationTime) {
+		$status = TRUE;
+
+		if($expirationTime === 0) {
+			// No valid expiration time set…
+			$status = !$status;
+		} else {
+			$creationDate = $recipient->getCrdate()->getTimestamp();
+			$expirationDate = $recipient->getCrdate()->getTimestamp() + $expirationTime;
+
+			if($creationDate <= $expirationDate) {
+				$status = !$status;
+			}
+		}
+
+		return $status;
+	}
 }

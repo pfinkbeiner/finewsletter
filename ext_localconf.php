@@ -21,12 +21,12 @@ if (!defined('TYPO3_MODE')) {
 	'FI.' . $_EXTKEY,
 	'Unsubscribe',
 	array(
-		'Recipient' => 'unsubscribe, update',
+		'Recipient' => 'unsubscribe, delete',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Recipient' => 'unsubscribe, update',
+		'Recipient' => 'unsubscribe, delete',
 		
 	)
 );
