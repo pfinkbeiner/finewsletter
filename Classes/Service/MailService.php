@@ -47,7 +47,7 @@ class MailService implements \TYPO3\CMS\Core\SingletonInterface {
 		$status = TRUE;
 
 		// Add this for testing… no messages are getting send out!
-		if (strtolower(getenv('CONTEXT')) === 'development' || $this0) {
+		if (strtolower(getenv('CONTEXT')) === 'development') {
 			$now = new \DateTime('now');
 			$mail = 'From: ' . $mailSettings['fromEmail'] . ' ' . $mailSettings['fromName'] . chr(10) .
 				'To: ' . $recipient . chr(10) .
