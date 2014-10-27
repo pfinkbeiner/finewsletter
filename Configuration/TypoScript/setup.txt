@@ -14,21 +14,21 @@ plugin.tx_finewsletter {
 	}
     settings {
         # in seconds to be as flexible as possible…
-        expirationTime = 60
+        expirationTime = 86400
         redirect {
             error {
                 invalidEmail = 0
                 emailNotUnique = 0
-                invalidVerificationLink = 15
-                confirmationLinkExpired = 16
+                invalidVerificationLink = 0
+                confirmationLinkExpired = 0
 
             }
             notice {
-                confirmationMailSent = 13
-                alreadyConfirmed = 17
+                confirmationMailSent = 0
+                alreadyConfirmed = 0
             }
             success {
-                subscriptionConfirmed = 14
+                subscriptionConfirmed = 0
             }
         }
         flashMessages {
