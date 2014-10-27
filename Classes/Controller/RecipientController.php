@@ -108,25 +108,46 @@ class RecipientController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 					$this->settings['mail']
 				);
 
-				$this->addFlashMessage(
-					$this->settings['flashMessages']['notice']['confirmationMailSent'],
-					'',
-					\TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE
-				);
+				if((int) $this->settings['redirect']['notice']['confirmationMailSent'] === 0) {
+					$this->addFlashMessage(
+						$this->settings['flashMessages']['notice']['confirmationMailSent'],
+						'',
+						\TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE
+					);
+				} else {
+					$target = $this->uriBuilder
+						->setTargetPageUid((int) $this->settings['redirect']['notice']['confirmationMailSent'])
+						->build();
+					$this->redirectToURI($target);
+				}
 			} else {
-				$this->addFlashMessage(
-					$this->settings['flashMessages']['error']['emailNotUnique'],
-					'',
-					\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
-				);
+				if((int) $this->settings['redirect']['error']['emailNotUnique'] === 0) {
+					$this->addFlashMessage(
+						$this->settings['flashMessages']['error']['emailNotUnique'],
+						'',
+						\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+					);
+				} else {
+					$target = $this->uriBuilder
+						->setTargetPageUid((int) $this->settings['redirect']['error']['emailNotUnique'])
+						->build();
+					$this->redirectToURI($target);
+				}
 			}
 
 		} else {
-			$this->addFlashMessage(
-				$this->settings['flashMessages']['error']['invalidEmail'],
-				'',
-				\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
-			);
+			if((int) $this->settings['redirect']['error']['invalidEmail'] === 0) {
+				$this->addFlashMessage(
+					$this->settings['flashMessages']['error']['invalidEmail'],
+					'',
+					\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+				);
+			} else {
+				$target = $this->uriBuilder
+					->setTargetPageUid((int) $this->settings['redirect']['error']['invalidEmail'])
+					->build();
+				$this->redirectToURI($target);
+			}
 		}
 
 		$this->redirect('subscribe');
